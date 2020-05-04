@@ -45,13 +45,19 @@ class MainEngine:
         # iterate through liked videos and creates a song JSON object for each, dynamically fetching song URIs
         for v in response["items"]:
             name = v["snippet"]["title"]
-            print(name)
+
             url = "https://www.youtube.com/watch?v={}".format(v["id"])
 
             video = youtube_dl.YoutubeDL({}).extract_info(url, download=False)
 
             song = video["track"]
             artist = video["artist"]
+
+            print('**********************')
+            print('video name: ' + name)
+            print('song name: ' + song)
+            print('artist name: ' + artist)
+            print('**********************')
 
             self.songs[name] = {
                 "url": url,
@@ -85,6 +91,9 @@ class MainEngine:
 
     # queries Spotify and fetches song URI
     def fetch_song(self, song, artist):
+
+        if (song == None or artist == None):
+            return
 
         # Spotify API query to search for a song with song name and artist name
         query = "https://api.spotify.com/v1/search?q=track%3A{}%20artist%3A{}&type=track%2Cartist&limit=20&offset=0".format(
